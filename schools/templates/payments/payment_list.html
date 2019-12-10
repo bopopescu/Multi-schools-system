@@ -1,0 +1,436 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Payments {% endblock title %}
+
+{% load static i18n %}
+
+{% load widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/payments.js' %}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ block.super }}
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-dollar"></i><small> Manage Payment</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <form class="form-horizontal form-label-left"
+                          id="PaymentForm"
+                          data-roles-url="{% url 'ajax_load_roles' %}"
+                          data-users-url="{% url 'ajax_load_user' %}"
+                          method="GET"
+                          enctype="multipart/form-data"
+                          accept-charset="utf-8"
+                          novalidate>{% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <div class="item form-group">
+                                    <label for="schoolSelect">School</label>
+                                    {% render_field form.school title="Schools" class="form-control" %}
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <div class="item form-group">
+                                    <label for="roleSelect">Role</label>
+                                    {% render_field form.role title="Role" class="form-control" %}
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <div class="item form-group">
+                                    <label for="userSelect">User</label>
+                                    {% render_field form.user title="User" class="form-control" %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                <br>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-success">Find</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+                    <div class="x_content">
+                        <div class="" data-example-id="togglable-tabs">
+
+                            <ul class="nav nav-tabs bordered">
+                                <li role="presentation" class="active"><a href="#"><i
+                                        class="fa fa-list-ol"></i> Payment List</a>
+                                </li>
+                            </ul>
+                            <br/>
+
+                            <div class="x_content">
+
+
+                                <form class="form-horizontal form-label-left"
+                                      role="form"
+                                      action=""
+                                      method="post"
+                                      enctype="multipart/form-data"
+                                      accept-charset="utf-8">{% csrf_token %}
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 mb-0">
+                                            {{ form.grade|as_crispy_field }}
+                                        </div>
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.school_name|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.address|as_crispy_field }}#}
+{#                                        </div>#}
+{##}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.phone|as_crispy_field }}#}
+{#                                        </div>#}
+                                    </div>
+
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.registration_date|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.email_address|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.fax|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.footer|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <br/>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-12 mb-0">#}
+{##}
+{#                                            <p class="text-muted well well-sm no-shadow"#}
+{#                                               style="margin-top: 10px;">#}
+{#                                                <strong>Setting Information:</strong>#}
+{#                                            </p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.currency|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.currency_symbol|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.enable_frontend|as_crispy_field }}#}
+{#                                        </div>#}
+{##}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.exam_final_result|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.latitude|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.longitude|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.api_key|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.theme|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.online_Admission|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-12 mb-0">#}
+{##}
+{#                                            <p class="text-muted well well-sm no-shadow"#}
+{#                                               style="margin-top: 10px;">#}
+{#                                                <strong>Social Information:</strong>#}
+{#                                            </p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.facebook_url|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.twitter_url|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.linkedIn_url|as_crispy_field }}#}
+{#                                        </div>#}
+{##}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.google_plus_url|as_crispy_field }}#}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.youtube_url|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.instagram_url|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.pinterest_url|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-12 mb-0">#}
+{##}
+{#                                            <p class="text-muted well well-sm no-shadow"#}
+{#                                               style="margin-top: 10px;">#}
+{#                                                <strong>Other Information:</strong>#}
+{#                                            </p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-row">#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.frontend_Logo|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                        <div class="form-group col-md-3 mb-0">#}
+{#                                            {{ form.backend_Logo|as_crispy_field }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-0">
+                                            <br></br>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-0">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-0">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-8">
+                                            <a href="{% url 'payment_list' %}"
+                                               class="btn btn-outline-secondary"
+                                               type="button">Cancel</a>
+                                            <button type="submit" class="btn btn-success">Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                {#                                <table id="datatable-responsive"#}
+                                {#                                       class="table table-striped table-bordered dt-responsive nowrap"#}
+                                {#                                       cellspacing="0"#}
+                                {#                                       width="100%">#}
+                                {#                                    <thead>#}
+                                {#                                    <tr>#}
+                                {#                                        <th>#SL</th>#}
+                                {#                                        <th>Photo</th>#}
+                                {#                                        <th>Name</th>#}
+                                {#                                        <th>Month</th>#}
+                                {#                                        <th>Grade Name</th>#}
+                                {#                                        <th>Salary Type</th>#}
+                                {#                                        <th>Total Allowance</th>#}
+                                {#                                        <th>Total Deduction</th>#}
+                                {#                                        <th>Gross Salary</th>#}
+                                {#                                        <th>Net Salary</th>#}
+                                {#                                        <th>Action</th>#}
+                                {#                                    </tr>#}
+                                {#                                    </thead>#}
+                                {#                                    <tbody>#}
+                                {#                                    {% for payment in users %}#}
+                                {#                                        <tr>#}
+                                {#                                            <td>{{ payment.id }}</td>#}
+                                {#                                            <td>#}
+                                {#                                                {% if payment.photo %}#}
+                                {#                                                    <img src="{{ payment.photo.url }}"#}
+                                {#                                                         alt="" width="50"#}
+                                {#                                                         style="background: rgba(15,174,221,0.97); padding: 2px;"/>#}
+                                {#                                                    <br/>#}
+                                {#                                                    <br/>#}
+                                {#                                                {% endif %}#}
+                                {#                                            </td>#}
+                                {#                                            <td>{{ payment.full_name }}</td>#}
+                                {#                                            <td>{{ payment.email }}</td>#}
+                                {#                                            <td>{{ payment.phone }}</td>#}
+                                {#                                            <td>{{ payment.joining_date }}</td>#}
+                                {#                                        </tr>#}
+                                {#                                    {% empty %}#}
+                                {#                                        <tr>#}
+                                {#                                            <td colspan="9" class="text-center bg-warning">No Data</td>#}
+                                {#                                        </tr>#}
+                                {#                                    {% endfor %}#}
+                                {#                                    </tbody>#}
+                                {#                                </table>#}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#payment-table').DataTable({
+                    dom: 'Bfrtip',
+                    iDisplayLength: 15,
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                        'print',
+                        'pageLength'
+                    ],
+                    search: true,
+                    responsive: true
+                });
+            });
+
+            $("#id_school").change(function () {
+                var url = $("#PaymentForm").attr("data-roles-url");
+                var schoolId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'school': schoolId
+                    },
+                    success: function (data) {
+                        $("#id_role").html(data);
+                    }
+                });
+
+            });
+
+            $("#id_role").change(function () {
+                var url = $("#PaymentForm").attr("data-users-url");
+                var roleId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'role': roleId
+                    },
+                    success: function (data) {
+                        $("#id_user").html(data);
+                    }
+                });
+            });
+
+        </script>
+
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+    <!-- Datatables -->
+    <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Chart.js -->
+    <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- Skycons -->
+    <script src="/static/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/static/vendors/Flot/jquery.flot.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/static/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/static/vendors/moment/min/moment.min.js"></script>
+    <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+{% endblock javascripts %}

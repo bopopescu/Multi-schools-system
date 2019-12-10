@@ -1,0 +1,172 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Make Payments {% endblock title %}
+
+{% load static i18n widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/payments.js' %}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ block.super }}
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+
+{% endblock stylesheets %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-dollar"></i><small> Manage Payment</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content quick-link">
+                        <span>Quick Link:</span>
+                        <a href="{% url 'salary_grade_list' %}">Salary Grade</a>
+                        | <a href="{% url 'payment_list' %}">Salary Payment</a>
+                        | <a href="{% url 'SalaryHistory' %}">Payment History</a>
+                    </div>
+                    <br/>
+
+                    <form class="form-horizontal form-label-left"
+                          id="SalaryPaymentForm"
+                          data-roles-url="{% url 'ajax_load_roles' %}"
+                          data-users-url="{% url 'ajax_load_payment_to' %}"
+                          method="POST"
+                          enctype="multipart/form-data"
+                          accept-charset="utf-8"
+                          novalidate>{% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3 mb-0">
+                                {{ form.role_type|as_crispy_field }}
+                            </div>
+                            <div class="teacher form-group col-md-3 mb-0">
+                                {{ form.payment_to|as_crispy_field }}
+                            </div>
+                            <div class="form-group col-md-1 mb-0">
+                                <br>
+                                <button type="submit" class="btn btn-warning">Search</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="x_content">
+                        <div class="" data-example-id="togglable-tabs">
+
+                            <ul class="nav nav-tabs bordered">
+                                <li role="presentation"><a href="#"><i
+                                        class="fa fa-list-ol"></i> Salary Paid List</a>
+                                </li>
+                                <li role="presentation" class="active"><a href="{% url 'salary_payment' %}"><i
+                                        class="fa fa-plus-square-o"></i> Pay Salary</a>
+                                </li>
+                            </ul>
+                            <br>
+
+                            <table id="payment-table"
+                                   class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
+                                   width="100%">
+                                <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for pay in payee %}
+                                    <tr>
+                                        <td> {{ pay.id }}</td>
+                                        <td>{{ pay.full_name }}</td>
+                                        <td>{{ pay.roles }}</td>
+                                        <td>
+                                            <div class="mb-4">
+                                                <a href="{% url 'pay_employee' pay.id %}"
+                                                   class="btn btn-warning btn-sm">
+                                                    <span class="glyphicon glyphicon-pencil"></span> Pay Salary</a>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="9" class="text-center bg-warning">No Data</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#payment-table').DataTable({
+                dom: 'Bfrtip',
+                iDisplayLength: 15,
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5',
+                    'print',
+                    'pageLength'
+                ],
+                search: true,
+                responsive: true
+            });
+        });
+
+        $("#id_role_type").change(function () {
+            var url = $("#SalaryPaymentForm").attr("data-users-url");
+            var roleId = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'role_type': roleId
+                },
+                success: function (data) {
+                    $("#id_payment_to").html(data);
+                }
+            });
+        });
+
+    </script>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+
+{% endblock javascripts %}

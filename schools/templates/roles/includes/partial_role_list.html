@@ -1,0 +1,33 @@
+{% for role in roles %}
+    <tr>
+        <td>{{ role.id }}</td>
+        <td>{{ role.school }}</td>
+        <td>{{ role.role_name }}</td>
+        <td>{{ role.note }}</td>
+        <td>{{ role.is_default }}</td>
+        <td>
+
+            {% if role.is_default == 'Yes' %}
+                <a href="{% url 'role_update' role.pk %}" class="btn btn-info btn-sm">
+                    <span class="fa fa-pencil-square-o"></span> Edit</a>
+
+            {% else %}
+
+                <a href="{% url 'role_update' role.pk %}" class="btn btn-info btn-sm">
+                    <span class="fa fa-pencil-square-o"></span> Edit</a>
+
+                <button type="button"
+                        class="btn btn-danger btn-sm js-delete-role"
+                        data-url="{% url 'role_delete' role.pk %}">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </button>
+            {% endif %}
+
+        </td>
+
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Academic Role</td>
+    </tr>
+{% endfor %}

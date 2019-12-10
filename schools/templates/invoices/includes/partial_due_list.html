@@ -1,0 +1,27 @@
+{% for invoice in invoices %}
+    <tr>
+        <td>{{ invoice.invoice_number }}</td>
+        <td>{{ invoice.student }}</td>
+        <td>{{ invoice.classroom }}</td>
+        <td>{{ invoice.fee_type }}</td>
+        <td>{{ invoice.fee_amount.Class_Amount  }}</td>
+        <td>{{ invoice.student.fees_discount.amount}}</td>
+        <td>{{ invoice.NetAmount }}</td>
+        <td style="color:red">{{ invoice.DueAmount }}</td>
+        
+        <td>
+            <div class="mb-4">
+                <a href="{% url 'invoice_view' invoice.pk %}" class="btn btn-warning btn-sm">
+                    <span class="fa fa-eye"></span> View</a>
+            </div>
+            <div class="mb-4">
+                <a href="{% url 'paying-fees' invoice.student_id %}" class="btn btn-info btn-sm">
+                    <span class="fa fa-credit-card"></span> Payment</a>
+            </div>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="11" class="text-center bg-warning">No Invoice</td>
+    </tr>
+{% endfor %}

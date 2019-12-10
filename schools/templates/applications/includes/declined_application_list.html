@@ -1,0 +1,35 @@
+{% for application in declined_applications %}
+    <tr>
+        <td>{{ application.id }}</td>
+        <td>{{ application.school }}</td>
+        <td></td>
+        <td>{{ application.applicant_type }}</td>
+        <td>{{ application.leave_Type }}</td>
+        <td>{{ application.applicant }}</td>
+        <td>{{ application.status }}</td>
+        <td>
+            <a href="{% url 'application_approve' application.pk %}" class="btn btn-sm btn-success">
+                <span class="fa fa-check-square-o"></span> Approve</a>
+
+            <a href="{% url 'application_waiting' application.pk %}" class="btn btn-sm btn-primary">
+                <span class="fa fa-spinner"></span> Waiting</a>
+
+            <button type="button"
+                    class="btn btn-warning btn-sm js-view-application"
+                    data-url="{% url 'application_view' application.pk %}">
+                <span class="glyphicon glyphicon-eye-open"></span> View
+            </button>
+
+            <button type="button"
+                    class="btn btn-danger btn-sm js-delete-application"
+                    data-url="{% url 'application_delete' application.pk %}">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Application</td>
+    </tr>
+{% endfor %}

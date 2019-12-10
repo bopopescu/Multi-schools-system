@@ -1,0 +1,14 @@
+{% for classroom in classrooms %}
+    <tr>
+        <td>{{ classroom.id }}</td>
+        <td>{{ classroom.classroom }}</td>
+        <td>
+            <a href="{% url 'mark_attendance' classroom.pk %}" class="btn btn-success btn-sm">
+                <span class="fa fa-pencil-square-o"></span> Take Attendance</a>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="10" class="text-center bg-warning">No Classroom</td>
+    </tr>
+{% endfor %}

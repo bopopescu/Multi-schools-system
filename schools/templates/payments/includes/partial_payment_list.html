@@ -1,0 +1,37 @@
+{% for payment in payments %}
+    <tr>
+        <td>{{ payment.id }}</td>
+        <td>{{ payment.school }}</td>
+        <td>{{ payment.is_active }}</td>
+        <td>{{ payment.payment_ID }}</td>
+        <td>{{ payment.ISBN_no }}</td>
+        <td>
+            {% if payment.payment_cover %}
+                <img src="{{ payment.payment_cover.url }}"
+                     alt="" width="50"
+                     style="background: rgba(15,174,221,0.97); padding: 2px;"/><br/><br/>
+            {% endif %}
+        </td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-view-payment"
+                    data-url="{% url 'payment_view' payment.pk %}">
+                <span class="glyphicon glyphicon-eye-open"></span> View
+            </button>
+            <div class="mb-4">
+                <a href="{% url 'payment_update' payment.pk %}" class="btn btn-info btn-sm">
+                    <span class="fa fa-pencil-square-o"></span> Edit</a>
+            </div>
+            <button type="button"
+                    class="btn btn-danger btn-sm js-delete-payment"
+                    data-url="{% url 'payment_delete' payment.pk %}">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+            <br>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="10" class="text-center bg-warning">No Payment</td>
+    </tr>
+{% endfor %}

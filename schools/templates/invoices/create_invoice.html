@@ -1,0 +1,284 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Invoice {% endblock title %}
+
+{% load static i18n %}
+
+{% load widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/invoices.js' %}"></script>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa fa-calendar-check-o"></i><small> Manage Invoice</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content quick-link">
+                        <span>Quick Link:</span>
+                        <a href="#">Discount</a>
+                        | <a href="#">Fee Type</a>
+                        | <a href="#">Fee Collection</a>
+                        | <a href="#">Manage Invoice</a>
+                        | <a href="#">Due Invoice</a>
+                        | <a href="#">Due Free Email</a>
+                        | <a href="#">Due Free SMS</a>
+                        | <a href="#">Income Head</a>
+                        | <a href="#">Income</a>
+                        | <a href="#">Expenditure Head</a>
+                        | <a href="#">Expenditure</a>
+                    </div>
+
+
+                    <div class="x_content">
+                        <div class="" data-example-id="togglable-tabs">
+
+                            <ul class="nav nav-tabs bordered">
+                                <li role="presentation"><a href="{% url 'invoice_list' %}"><i
+                                        class="fa fa-list-ol"></i> Invoice List</a>
+                                </li>
+                                <li role="presentation" class="active"><a href="{% url 'invoice_create' %}"><i
+                                        class="fa fa-plus-square-o"></i> Create Invoice</a>
+                                </li>
+                            </ul>
+                            <br/>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="tab_invoice_list">
+                                    <div class="x_content">
+
+                                        <form class="form-horizontal form-label-left"
+                                              id="InvoiceForm"
+                                              data-classrooms-url="{% url 'ajax_load_classrooms' %}"
+                                              data-fee_amount-url="{% url 'ajax_load_fee_amount' %}"
+                                              data-students-url="{% url 'ajax_load_students' %}"
+                                              data-fee_types-url="{% url 'ajax_load_fee_types' %}"
+                                              data-discount-url="{% url 'ajax_load_student_discount' %}"
+
+                                              method="POST"
+                                              enctype="multipart/form-data"
+                                              accept-charset="utf-8"
+                                              novalidate>{% csrf_token %}
+
+
+                                            <div class="form-row" style="margin-left: 15%">
+
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.classroom|as_crispy_field }}
+                                                </div>
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.student|as_crispy_field }}
+                                                </div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.fee_type|as_crispy_field }}
+                                                </div>
+
+                                                <div id="fee_amounts" class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.fee_amount|as_crispy_field }}
+                                                </div>
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.month|as_crispy_field }}
+                                                </div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.paid_status|as_crispy_field }}
+                                                </div>
+                                                <div class="payment_method col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.Payment_Method|as_crispy_field }}
+                                                </div>
+                                                <div class="bank_name col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.Bank_Name|as_crispy_field }}
+                                                </div>
+                                                <div class="cheque_number col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.Cheque_Number|as_crispy_field }}
+                                                </div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.note|as_crispy_field }}
+                                                </div>
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.discount|as_crispy_field }}
+                                                </div>
+                                                <div class="col-md-8 col-sm-8 col-xs-12">
+                                                    {{ form.net_amount|as_crispy_field }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-success">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            //loading feetype depending on a specific class selected
+            $("#id_classroom").change(function () {
+                var url = $("#InvoiceForm").attr("data-fee_types-url");
+                var classroomId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'classroom': classroomId
+                    },
+                    success: function (data) {
+                        $("#id_fee_type").html(data);
+                    }
+                });
+            });
+            $(document).ready(function () {
+                $('#invoice-table').DataTable({
+                    dom: 'Bfrtip',
+                    iDisplayLength: 15,
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5',
+                        'print',
+                        'pageLength'
+                    ],
+                    search: true,
+                    responsive: true
+                });
+            });
+            //hiding the fields that don't require input by this form but will be used at a later input
+            $("#div_id_school").hide();
+            $("#div_id_discount").hide();
+            $("#div_id_fee_amount").hide();
+            $('#div_id_net_amount').hide();
+
+            //APPLYING THE DISCOUNT ON A STUDENT
+            $('#id_fee_amount, #id_discount').on('input', function (e) {
+                $('#id_net_amount').val(parseInt($('#id_fee_amount').val()) - parseInt($('#id_discount').val()));
+            });
+
+            //loading students depending on a specific class selected
+
+            $("#id_classroom").change(function () {
+                var url = $("#InvoiceForm").attr("data-students-url");
+                var classroomId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'classroom': classroomId
+                    },
+                    success: function (data) {
+                        $("#id_student").html(data);
+                    }
+                });
+            });
+
+            //ajax for loading fee type amount depending on the fee type selected
+
+            $("#id_fee_type").change(function () {
+                var url = $("#InvoiceForm").attr("data-fee_amount-url");
+                var fee_type_id = $(this).val();
+                $.ajax({
+                    url: url,
+                    data: {
+                        'fee_type': fee_type_id
+                    },
+                    success: function (data) {
+                        $("#id_fee_amount").html(data);
+                    }
+                });
+            });
+            //ajax to load student discount after loading a student
+            $("#id_student").change(function () {
+                var url = $("#InvoiceForm").attr("data-discount-url");
+                var student_id = $(this).val();
+                $.ajax({
+                    url: url,
+                    data: {
+                        'student': student_id
+                    },
+                    success: function (data) {
+                        $("#id_discount").html(data);
+                    }
+                });
+            });
+
+            //choosing the payment method
+            $("#id_paid_status").change(function () {
+                if ($(this).val() === "Paid") {
+                    $('.payment_method').show();
+                } else if ($(this).val() === "Unpaid") {
+                    $('.payment_method').hide();
+                    $('.bank_name').hide();
+                    $('.cheque_number').hide();
+                } else {
+                    $('.payment_method').hide();
+                    $('.bank_name').hide();
+                    $('.cheque_number').hide();
+                }
+            });
+            $("#id_paid_status").trigger("change");
+
+            //if the user selects payment by cheque
+            $("#id_Payment_Method").change(function () {
+                if ($(this).val() === "Cheque") {
+                    $('.bank_name').show();
+                    $('.cheque_number').show();
+                } else if ($(this).val() === "Cash") {
+                    $('.bank_name').hide();
+                    $('.cheque_number').hide();
+                } else {
+                    $('.bank_name').hide();
+                    $('.cheque_number').hide();
+                }
+            });
+            $("#id_Payment_Method").trigger("change");
+
+            $(document).ready(function () {
+                $("#id_fee_amount").attr('placeholder', '{{form.fee_amount.label}}');
+                $("#id_Bank_Name").attr('placeholder', '{{form.Bank_Name.label}}');
+                $("#id_month").attr('placeholder', '{{form.month.label}}');
+                $("#id_Cheque_Number").attr('placeholder', '{{form.Cheque_Number.label}}');
+            });
+            document.getElementById('id_fee_amount').readOnly = true;
+            document.getElementById('id_net_amount').readOnly = true;
+
+        </script>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+    <!-- Datatables -->
+    <!-- DateJS -->
+    <script src="/static/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+
+
+
+{% endblock javascripts %}

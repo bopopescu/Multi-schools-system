@@ -1,0 +1,25 @@
+{% for subject in registered_subjects %}
+    <tr>
+        <th scope="row">
+            <input name="{{ subject.pk }}"
+                   value="{{ subject.subject_unit }}"
+                   class="form-check-input" type="checkbox"
+                   id="checkbox1">
+            <label class="form-check-label" for="checkbox1"
+                   class="label-table"></label>
+        </th>
+        <td>{{ subject.subject_code }}</td>
+        <td>{{ subject.subject_name }}</td>
+        <td>{{ subject.subject_unit }}</td>
+        {% if not subject.is_elective %}
+            <td>Core</td>
+        {% else %}
+            <td> -</td>
+        {% endif %}
+        {% if subject.is_elective %}
+            <td>Elective</td>
+        {% else %}
+            <td class="text-center">-</td>
+        {% endif %}
+    </tr>
+{% endfor %}

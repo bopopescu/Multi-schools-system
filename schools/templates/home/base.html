@@ -1,0 +1,192 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta charset="ISO-8859-15">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Home | Canon - Multi School Management System Express</title>
+    <link rel="icon" href="http://www.codetroopers-team.com/gmsms/assets/uploads//logo/1572862354-favicon-icon.png"
+          type="image/x-icon"/>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="http://www.codetroopers-team.com/gmsms/assets/css/front/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.fancybox.css' %}">
+    <link rel="stylesheet" href="http://www.codetroopers-team.com/gmsms/assets/css/front/theme/slate-gray.css">
+
+
+    <link rel="stylesheet" href="http://www.codetroopers-team.com/gmsms/assets/css/front/responsive.css">
+
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.js' %}"></script>
+
+</head>
+
+<body>
+
+<header>
+    <div class="header-top-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-8 col-sm-12 col-12 hta-left">
+                    <div class="hta-box">
+                        <p class="text">Have you any question?</p>
+                    </div>
+                    <div class="hta-box">
+                        <span class="icon"><i class="fas fa-phone"></i></span>
+                        <p class="text">Call us : 0123456789</p>
+                    </div>
+
+                    <div class="hta-box">
+                        <span class="icon"><i class="fas fa-envelope"></i></span>
+                        <p class="text">Email us : info@canon.com</p>
+                    </div>
+
+                </div>
+                <div class="col-lg-5 col-md-4 col-sm-12 col-12 hta-right text-right">
+                    <div class="hta-box">
+
+                        {% if request.tenant %}
+                            <a href="http://{{ request.tenant.domain_url }}:8000/canon/">
+                                <strong>{{ request.tenant.schema_name }}</strong>
+                            </a>
+                        {% else %}
+                            None.
+                        {% endif %}
+
+                    </div>
+
+                    <div class="hta-box">
+                        <a class="text" href="#">Admission</a>
+                    </div>
+
+                    <div class="hta-box">
+                        <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+                        <a class="text" href="#">Log In</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-bottom-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 offset-lg-0 col-md-4 offset-md-3 col-sm-6 col-6">
+                    <div class="logo">
+                        <a href="http://www.codetroopers-team.com/gmsms/">
+
+                            <img src="#"
+                                 alt=""/>
+
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10 offset-lg-0 col-md-8 offset-md-2 col-sm-12 col-12">
+                    <div class="menu">
+                        <nav id="mobile_menu_active">
+                            <ul id="menu">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Announcement <span class="icon fas fa-chevron-down"></span></a>
+                                    <ul class="drop">
+                                        <li><a href="#">News</a></li>
+                                        <li><a href="#">Notice</a></li>
+                                        <li><a href="#">Holiday</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Event</a></li>
+                                <li><a href="#">Gallery</a></li>
+                                <li><a href="#">Teacher</a></li>
+                                <li><a href="#">Staff</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="javascript:void(0)">Page <span class="icon fas fa-chevron-down"></span></a>
+                                    <ul class="drop">
+                                        <li><a href="#">dgfdgdf ed</a></li>
+                                        <li><a href="#">New Page Ed</a></li>
+                                        <li><a href="#">Our Vision</a></li>
+                                        <li><a href="#">Our Mission</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+
+<!-- page content -->
+<section class="slider-area owl-carousel">
+    <div class="single-slider">
+        <div class="img">
+            <img src="{% static 'img/home-slider-3.jpg' %}"
+                 alt="">
+        </div>
+        <div class="content">
+            <div class="container">
+                <h3 class="intro animated">Welcome to</h3>
+                <h2 class="title animated">
+                    School Graphics Competition </h2>
+                <a class="link animated glbscl-link-btn hvr-bs"
+                   href="#">Admission Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="single-slider">
+        <div class="img">
+            <img src="{% static 'img/home-slider-2.jpg' %}"
+                 alt="">
+        </div>
+        <div class="content">
+            <div class="container">
+                <h3 class="intro animated">Welcome to</h3>
+                <h2 class="title animated">
+                    Happy Birthday for Students data </h2>
+                <a class="link animated glbscl-link-btn hvr-bs"
+                   href="#">Admission Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="single-slider">
+        <div class="img">
+            <img src="{% static 'img/home-slider-1.jpg' %}"
+                 alt="">
+        </div>
+        <div class="content">
+            <div class="container">
+                <h3 class="intro animated">Welcome to</h3>
+                <h2 class="title animated">
+                    Caption </h2>
+                <a class="link animated glbscl-link-btn hvr-bs"
+                   href="#">Admission Now</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+{% block content %}
+{% endblock content %}
+{% include "home/scripts.html" %}
+
+</body>
+</html>
+

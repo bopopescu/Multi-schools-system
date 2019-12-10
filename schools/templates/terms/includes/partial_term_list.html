@@ -1,0 +1,40 @@
+{% for term in terms %}
+    <tr>
+        <td>{{ term.id }}</td>
+        <td>{{ term.school }}</td>
+        <td>{{ term.term }}</td>
+        <td>{{ term.year }}</td>
+        <td>{{ term.is_current_term }}</td>
+        <td>
+
+            {% if term.is_current_term == True %}
+                <a href="{% url 'term_update' term.pk %}" class="btn btn-info btn-sm">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit</a>
+
+                <a href="#" class="btn btn-success btn-sm">
+                    <span class="glyphicon glyphicon-ok"></span> Active</a>
+
+            {% else %}
+
+                <a href="{% url 'term_update' term.pk %}" class="btn btn-info btn-sm">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit</a>
+
+                <button type="button"
+                        class="btn btn-danger btn-sm js-delete-term"
+                        data-url="{% url 'term_delete' term.pk %}">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </button>
+
+                <button type="button"
+                        class="btn btn-warning btn-sm"
+                        data-url="#"> Activate
+                </button>
+
+            {% endif %}
+
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Academic Term</td>
+    </tr>
+{% endfor %}

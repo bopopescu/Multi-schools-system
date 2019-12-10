@@ -1,0 +1,31 @@
+{% for slider in sliders %}
+    <tr>
+        <td>{{ slider.id }}</td>
+        <td>{{ slider.school }}</td>
+        <td>
+            {% if slider.slider_image %}
+                <img src="{{ slider.slider_image.url }}"
+                     alt="" width="80"/><br/>
+            {% endif %}
+        </td>
+        <td>{{ slider.image_title }}</td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-view-slider"
+                    data-url="{% url 'slider_view' slider.pk %}">
+                <span class="glyphicon glyphicon-eye-open"></span> View
+            </button>
+            <a href="{% url 'slider_update' slider.pk %}" class="btn btn-info btn-sm">
+                <span class="fa fa-pencil-square-o"></span> Edit</a>
+            <button type="button"
+                    class="btn btn-danger btn-sm js-delete-slider"
+                    data-url="{% url 'slider_delete' slider.pk %}">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Slider</td>
+    </tr>
+{% endfor %}

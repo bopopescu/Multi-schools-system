@@ -1,0 +1,53 @@
+<form method="post" action="{% url 'complain_view' form.instance.pk %}" class="js-complain-view-form"
+      enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Complain Information</h4>
+    </div>
+    <div class="modal-body">
+
+        <div class="" role="tabpanel" data-example-id="togglable-tabs">
+            <div id="myTabContent" class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                     aria-labelledby="basic-tab">
+                    <p></p>
+                    <table id="tablePreview" class="table table-bordered table-striped">
+                        <!--Table head-->
+                        <thead>
+                        <tr>
+                            <th>School Name</th>
+                            <td>{{ form.instance.school }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>Complain Type</th>
+                            <td>{{ form.instance.complain_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Complain By</th>
+                            <td>{{ form.instance.complain_user }}</td>
+                        </tr>
+                        <tr>
+                            <th>Complain</th>
+                            <td>{{ form.instance.complain }}</td>
+                        </tr>
+                        <tr>
+                            <th>Complain Date</th>
+                            <td>{{ form.instance.complain_date }}</td>
+                        </tr>
+                        </tbody>
+                        <!--Table body-->
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</form>

@@ -1,0 +1,140 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Marks {% endblock title %}
+
+{% load static i18n crispy_forms_tags widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/marks.js' %}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-file-text-o"></i><small> Manage Mark</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content quick-link">
+                        <span>Quick Link:</span>
+                        | <a href="#">Manage Mark</a>
+                        | <a href="#">Exam Term Result</a>
+                        | <a href="#">Exam Final Result</a>
+                        | <a href="#">Merit List</a>
+                        | <a href="#">Mark Sheet</a>
+                        | <a href="#">Result Card</a>
+                        | <a href="#">All Result Card</a>
+                        | <a href="#">Mark send by Email</a>
+                        | <a href="#">Mark send by SMS</a>
+                        | <a href="#">Result Email</a>
+                        | <a href="#">Result SMS</a>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div class="container">
+                            <center><h1>Update Teacher Attendance:</h1></center>
+                            <center><h3>{{ date }}</h3></center>
+                            <p></p><br>
+                            {% if error %}
+                                <p><strong>{{ error }}</strong></p>
+                            {% endif %}
+
+
+                            <form method="POST" class="post-form">
+                                {{ formset.management_form }}
+                                {% csrf_token %}
+                                <br>
+                                <table class="table table-bordered table-hover ">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Responsibility</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Mark Attendance</th>
+                                    </tr>
+                                    {% for teacher,form in list %}
+                                        <tr>
+                                            <td>{{ teacher.user.teacher.id }}</td>
+                                            <td>
+                                                {% if teacher.user.photo %}
+                                                    <img src="{{ teacher.user.photo.url }}"
+                                                         alt="" width="50"
+                                                         style="background: rgba(15,174,221,0.97); padding: 2px;"/><br/>
+                                                    <br/>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ teacher.user.teacher }}</td>
+                                            <td>{{ teacher.user.teacher.responsibility }}</td>
+                                            <td>{{ teacher.user.phone }}</td>
+                                            <td>{{ teacher.user.email }}</td>
+                                            <td class="align">
+                                                {% for radio in form %}
+                                                    {{ radio }}
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                                <button type="submit" class="save btn btn-default" style="cursor: pointer">Save</button>
+                            </form>
+                        </div>
+                        <script>
+                            $("input[value=Present]").prop('checked', true);
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+    <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Chart.js -->
+    <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- Skycons -->
+    <script src="/static/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/static/vendors/Flot/jquery.flot.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/static/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/static/vendors/moment/min/moment.min.js"></script>
+    <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+{% endblock javascripts %}

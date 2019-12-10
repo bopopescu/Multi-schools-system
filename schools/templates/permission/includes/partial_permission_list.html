@@ -1,0 +1,19 @@
+{% for permission in permissions %}
+    <tr>
+        <td>{{ permission.id }}</td>
+        <td>{{ permission.role.role_name }}</td>
+        <td>{{ permission.role.note }}</td>
+        <td>{{ permission.role.is_default }}</td>
+
+        <td>
+            <div class="mb-4">
+                <a href="{% url 'permission_update' permission.pk %}" class="btn btn-success btn-sm">
+                    <span class="fa fa-folder-open-o"></span> Update Role Permission</a>
+            </div>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Permission</td>
+    </tr>
+{% endfor %}

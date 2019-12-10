@@ -1,0 +1,22 @@
+{% for subject in subjects %}
+    {% if subject.term == "First" %}
+        <tr>
+            <th scope="row">
+                <input name="{{ subject.pk }}"
+                       value="{{ subject.subject_unit }}"
+                       class="form-check-input" type="checkbox"
+                       id="checkbox1">
+                <label class="form-check-label" for="checkbox1"
+                       class="label-table"></label>
+            </th>
+            <td>{{ subject.subject_code }}</td>
+            <td>{{ subject.subject_name }}</td>
+            <td>{{ subject.subject_unit }}</td>
+            {% if subject.is_elective %}
+                <td>Elective</td>
+            {% else %}
+                <td>Core</td>
+            {% endif %}
+        </tr>
+    {% endif %}
+{% endfor %}

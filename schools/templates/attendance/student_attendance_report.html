@@ -1,0 +1,253 @@
+{% extends 'app/base_site.html' %}
+{% block title %}Attendance Report{% endblock %}
+
+{% load static i18n crispy_forms_tags widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/marks.js' %}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    {% load filters %}
+
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-book"></i><small> Attendance Report</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content quick-link">
+                        <span>Quick Link:</span>
+                        <a href="#">Manage Book</a>
+                        | <a href="#">Library Member</a>
+                        | <a href="#">Issue & Return</a>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="" data-example-id="togglable-tabs">
+
+                            <ul class="nav nav-tabs bordered">
+                                <li role="presentation" class="active"><a href="#"><i
+                                        class="fa fa-list-ol"></i> Attendance</a>
+                                </li>
+                                <li role="presentation"><a href="#"><i
+                                        class="fa fa-plus-square-o"></i> Attendance</a>
+                                </li>
+                            </ul>
+                            <br/>
+                            <div class="tab-content">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true"
+                                               aria-controls="collapseOne">
+                                                Overview Report
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+                                            <br>
+                                            <div id="report-1">
+                                                <h2>Overview Report</h2>
+                                                <h4>{{ date }}</h4>
+                                                <br>
+                                                <table class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Present</th>
+                                                        <th>Late</th>
+                                                        <th>Absent</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Boys</strong></td>
+                                                        <td>{{ p_boys|length }}</td>
+                                                        <td>{{ l_boys|length }}</td>
+                                                        <td>{{ a_boys|length }}</td>
+                                                        <td id='sum_boys'></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Girls</strong></td>
+                                                        <td>{{ p_girls|length }}</td>
+                                                        <td>{{ l_girls|length }}</td>
+                                                        <td>{{ a_girls|length }}</td>
+                                                        <td id='sum_girls'></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Total</strong></td>
+                                                        <td id='sum_present'></td>
+                                                        <td id='sum_late'></td>
+                                                        <td id='sum_absent'></td>
+                                                        <td id='total'></td>
+                                                    </tr>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h5 class="mb-0">
+                                            <a class="collapsed" data-toggle="collapse" href="#collapseTwo"
+                                               aria-expanded="true"
+                                               aria-controls="collapseTwo">
+                                                Detailed Report
+                                            </a>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+                                            <br><br>
+                                            <div id="report-2">
+                                                <h2>Detailed Report</h2>
+                                                <h4>{{ date }}</h4>
+                                                <br>
+                                                <table class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th><strong>Class</strong></th>
+                                                        <th colspan="3"><strong>Boys</strong></th>
+                                                        <th colspan="3"><strong>Girls</strong></th>
+                                                        <th colspan="3"><strong>Total</strong></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td><strong>Present</strong></td>
+                                                        <td><strong>Late</strong></td>
+                                                        <td><strong>Absent</strong></td>
+                                                        <td><strong>Present</strong></td>
+                                                        <td><strong>Late</strong></td>
+                                                        <td><strong>Absent</strong></td>
+                                                        <td><strong>Present</strong></td>
+                                                        <td><strong>Late</strong></td>
+                                                        <td><strong>Absent</strong></td>
+                                                    </tr>
+
+                                                    {% for teacher,b_p,b_l,b_a,g_p,g_l,g_a,t_p,t_l,t_a,st in report_data %}
+                                                        <tr>
+
+                                                            <td>
+
+                                                                <a data-toggle="collapse" href=".{{ teacher.pk }}">
+                                        <span class="btn"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                            {{ teacher.classroom }} - {{ teacher.section }}
+                                        </span>
+                                                                </a>
+
+                                                            </td>
+
+                                                            <td>{{ b_p }}</td>
+                                                            <td>{{ b_a }}</td>
+                                                            <td>{{ b_l }}</td>
+
+                                                            <td>{{ g_p }}</td>
+                                                            <td>{{ g_a }}</td>
+                                                            <td>{{ g_l }}</td>
+
+                                                            <td>{{ t_p }}</td>
+                                                            <td>{{ t_a }}</td>
+                                                            <td>{{ t_l }}</td>
+
+                                                        </tr>
+
+                                                        <tr class="collapse {{ teacher.pk }}">
+                                                            <th colspan="1">Roll Number</th>
+                                                            <th colspan="3">Student Name</th>
+                                                            <th colspan="3">Status</th>
+                                                        </tr>
+                                                        {% for student in st %}
+                                                            <tr class="collapse {{ teacher.pk }}">
+                                                                <td>{{ student.roll_no }}</td>
+                                                                <td colspan='3'>{{ student.student_name }}</td>
+                                                                <td colspan='3'>{{ attendance|find_attendance:student }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+
+                                                    {% endfor %}
+
+                                                </table>
+
+                                                <a href="{% url 'export_to_csv' pk=classroom.pk %}"
+                                                   class="btn btn-primary">Download
+                                                    Detailed Report</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            // Overview Report
+            var sum_boys = {{ p_boys|length }} +{{ a_boys|length }} + {{  l_boys|length }};
+            var sum_girls = {{ p_girls|length }} +{{ a_girls|length }} + {{ l_girls|length }};
+            var sum_present = {{ p_boys|length }} + {{ p_girls|length }};
+            var sum_late = {{ l_boys|length }} + {{ l_girls|length }};
+            var sum_absent = {{ a_boys|length }} + {{ a_girls|length }};
+            document.querySelector('#sum_boys').innerHTML += sum_boys;
+            document.querySelector('#sum_girls').innerHTML += sum_girls;
+            document.querySelector('#sum_present').innerHTML += sum_present;
+            document.querySelector('#sum_absent').innerHTML += sum_absent;
+            document.querySelector('#sum_late').innerHTML += sum_late;
+            document.querySelector('#total').innerHTML += sum_present + sum_absent + sum_late;
+        </script>
+
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+    <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Chart.js -->
+    <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- Skycons -->
+    <script src="/static/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/static/vendors/Flot/jquery.flot.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/static/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/static/vendors/moment/min/moment.min.js"></script>
+    <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+{% endblock javascripts %}

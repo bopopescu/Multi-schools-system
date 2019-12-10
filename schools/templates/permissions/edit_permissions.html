@@ -1,0 +1,36 @@
+{% extends "app/index.html" %}
+
+{% block body %}
+    <div class="container">
+        {% load crispy_forms_tags %}
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="text-warning">Edit Rights</h5>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary" name="button">Edit</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+
+
+
+</body>
+</html>

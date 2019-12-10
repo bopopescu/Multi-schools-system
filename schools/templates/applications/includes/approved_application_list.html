@@ -1,0 +1,22 @@
+{% for application in approved_applications %}
+    <tr>
+        <td>{{ application.id }}</td>
+        <td>{{ application.school }}</td>
+        <td></td>
+        <td>{{ application.applicant_type }}</td>
+        <td>{{ application.leave_Type }}</td>
+        <td>{{ application.applicant }}</td>
+        <td>{{ application.status }}</td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-view-application"
+                    data-url="{% url 'application_view' application.pk %}">
+                <span class="glyphicon glyphicon-eye-open"></span> View
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Application</td>
+    </tr>
+{% endfor %}

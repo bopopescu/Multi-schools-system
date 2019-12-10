@@ -1,0 +1,15 @@
+{% for subject in subjects %}
+    <tr>
+        <td>{{ subject.id }}</td>
+        <td>{{ subject.subject_code }}</td>
+        <td>{{ subject.subject_name }}</td>
+        <td>
+            <a href="{% url 'submit_mark' subject.pk %}" class="btn btn-success btn-sm">
+                <span class="fa fa-pencil-square-o"></span> Mark</a>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="10" class="text-center bg-warning">No Subject</td>
+    </tr>
+{% endfor %}

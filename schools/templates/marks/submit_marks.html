@@ -1,0 +1,290 @@
+{% extends 'app/base_site.html' %}
+
+{% block title %} Marks {% endblock title %}
+
+{% load static i18n crispy_forms_tags widget_tweaks %}
+
+{% block javascript %}
+    <script src="{% static 'schools/js/marks.js' %}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-file-text-o"></i><small> Manage Mark</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content quick-link">
+                        <span>Quick Link:</span>
+                        | <a href="#">Manage Mark</a>
+                        | <a href="#">Exam Term Result</a>
+                        | <a href="#">Exam Final Result</a>
+                        | <a href="#">Merit List</a>
+                        | <a href="#">Mark Sheet</a>
+                        | <a href="#">Result Card</a>
+                        | <a href="#">All Result Card</a>
+                        | <a href="#">Mark send by Email</a>
+                        | <a href="#">Mark send by SMS</a>
+                        | <a href="#">Result Email</a>
+                        | <a href="#">Result SMS</a>
+                    </div>
+
+                    <div class="x_content">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                    </button>
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form class="form-horizontal form-label-left"
+                              action=""
+                              id="MarkForm"
+                              method="POST"
+                              enctype="multipart/form-data"
+                              accept-charset="utf-8"
+                              novalidate>{% csrf_token %}
+
+                            <div class="card">
+                                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
+                                    {{ current_term }} Term - {{ current_year }}
+                                </h3>
+                            </div>
+
+                            <div class="card">
+                                <h4 class="card-header text-center font-weight-bold text-uppercase py-4">
+                                    <div class="dropdown">
+                                        <button class="btn btn-info dropdown-toggle float-right" type="button"
+                                                id="dropdownMenu3" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                            {{ subject.subject_code }}
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                            <h6 class="dropdown-header">Select Subject</h6>
+                                            {% for subject in subjects %}
+                                                <a data-toggle="tooltip" title="{{ subject.subject_name }}"
+                                                   class="dropdown-item"
+                                                   href="{% url 'submit_mark' subject.id %}">
+                                                    {{ subject.subject_code }}
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                </h4>
+                            </div>
+
+                            <div class="card">
+                                <h4 class="card-header text-center font-weight-bold text-uppercase py-4">
+                                    {{ subject.subject_name }}
+                                </h4>
+                            </div>
+
+                            <table class="table table-bordered table-responsive-md table-striped text-center">
+                                <tr>
+                                    <th class="text-center">Student</th>
+                                    <th class="text-center">B.O.T Score</th>
+                                    <th class="text-center">M.O.T Score</th>
+                                    <th class="text-center">E.O.T Score</th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-center">Grade</th>
+                                    <th class="text-center">Comment</th>
+                                </tr>
+                                {% for student in students %}
+
+                                    <tr>
+                                        <td class="pt-3-half"
+                                            name="{{ student.id }}"
+                                            contenteditable="false">
+                                            {{ student.student.admission_no }}
+                                        </td>
+                                        <td class="pt-3-half" contenteditable="false">
+                                            <label for="bot">
+                                                <input id="bot"
+                                                       class="score"
+                                                       type="number"
+                                                       style="width: 4em"
+                                                       name="{{ student.id }}"
+                                                       value="{{ student.bot }}">
+                                            </label>
+                                        </td>
+                                        <td class="pt-3-half" contenteditable="false">
+                                            <label for="mot">
+                                                <input id="mot"
+                                                       class="score"
+                                                       type="number"
+                                                       style="width: 4em"
+                                                       name="{{ student.id }}"
+                                                       value="{{ student.mot }}">
+                                            </label>
+                                        </td>
+                                        <td class="pt-3-half" contenteditable="false">
+                                            <label>
+                                                <input class="score"
+                                                       type="number"
+                                                       style="width: 4em"
+                                                       name="{{ student.id }}"
+                                                       value="{{ student.eot }}">
+                                            </label>
+                                        </td>
+                                        <td class="pt-3-half"
+                                            contenteditable="false">{{ student.total }}</td>
+                                        <td class="pt-3-half"
+                                            contenteditable="false">{{ student.grade }}</td>
+                                        <td class="pt-3-half"
+                                            contenteditable="false">{{ student.comment }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-12 mb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-8">
+                                    <a href="{% url 'manage_mark' %}"
+                                       class="btn btn-outline-secondary" type="button">Cancel</a>
+                                    <button id="submit" type="submit" data-toggle="tooltip" title="Save Score"
+                                            class="btn btn-primary">Submit
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('update')
+                .addEventListener('click', function () {
+                    toastr.info('Button Clicked');
+                })
+        </script>
+        <script type="text/javascript">
+            $("#id_school").change(function () {
+                var url = $("#MarkForm").attr("data-exams-url");
+                var schoolId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'school': schoolId
+                    },
+                    success: function (data) {
+                        $("#id_exam").html(data);
+                    }
+                });
+
+            });
+
+            $("#id_school").change(function () {
+                var url = $("#MarkForm").attr("data-classrooms-url");
+                var schoolId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'school': schoolId
+                    },
+                    success: function (data) {
+                        $("#id_classroom").html(data);
+                    }
+                });
+
+            });
+
+
+            $("#id_classroom").change(function () {
+                var url = $("#MarkForm").attr("data-sections-url");
+                var classroomId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'classroom': classroomId
+                    },
+                    success: function (data) {
+                        $("#id_section").html(data);
+                    }
+                });
+            });
+
+            $("#id_classroom").change(function () {
+                var url = $("#MarkForm").attr("data-subjects-url");
+                var classroomId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'classroom': classroomId
+                    },
+                    success: function (data) {
+                        $("#id_subject").html(data);
+                    }
+                });
+            });
+
+
+        </script>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+    <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <!-- Chart.js -->
+    <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- Skycons -->
+    <script src="/static/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/static/vendors/Flot/jquery.flot.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/static/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/static/vendors/moment/min/moment.min.js"></script>
+    <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+{% endblock javascripts %}

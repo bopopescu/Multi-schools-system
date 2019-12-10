@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for payee in payees %}
+<option value="{{ payee.pk }}">{{ payee.full_name }}</option>
+{% endfor %}

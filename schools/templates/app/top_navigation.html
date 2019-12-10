@@ -1,0 +1,55 @@
+<div class="nav_menu">
+    <nav>
+        <div class="col-md-1">
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+        </div>
+
+
+        <div class="col-md-7">
+            <ul class="nav navbar-nav navbar-left">
+                <li class="nav-item">
+                    <a class="border border-light grey-text">
+                        <h3>
+                            {% if request.tenant %}
+                                {% for school in schools %}
+                                        <strong>{{ school.school_name }}</strong>
+                                {% endfor %}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </h3>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="col-md-4">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+
+                        {{ request.user.username }}
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-left">
+                        <li><a href="{% url 'profile' %}"> Profile</a></li>
+                        <li><a href="{% url 'change_password' %}"> Change Password</a></li>
+                        <li><a href="{% url 'logout_user' %}"><i class="fa fa-sign-out pull-left"></i>Log Out</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'index_public' %}"
+                       class="nav-link border border-light grey-text rounded waves-effect">
+                        <i class="fa fa-globe mr-3"></i> Web
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</div>

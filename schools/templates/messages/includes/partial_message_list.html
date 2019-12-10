@@ -1,0 +1,14 @@
+{% for message in messages %}
+    <tr>
+        <td>{{ message.id }}</td>
+        <td>{{ message.school }}</td>
+        <td>{{ message.status }}</td>
+        <td>{{ message.sender }}</td>
+        <td>{{ message.subject }}</td>
+        <td>{{ message.send_time }}</td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="9" class="text-center bg-warning">No Message</td>
+    </tr>
+{% endfor %}
