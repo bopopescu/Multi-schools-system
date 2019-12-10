@@ -81,7 +81,7 @@ Pyphen==0.9.5
 PySocks==1.6.8
 python3-openid==3.1.0
 pytz==2019.2
-PyYAML==3.13
+PyYAML==5.1
 redis==3.3.11
 regex==2019.11.1
 reportlab==3.5.23
